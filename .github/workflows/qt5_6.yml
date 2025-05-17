@@ -98,18 +98,18 @@ jobs:
       - name: 👷 Build ${{ env.HINT }}
         shell: cmd
         run: |
-           cmake --preset windows-${{ env.BUILD_TYPE }} ${{ steps.dependencies.outputs.cmakeArgs }}
-           cmake --build --preset windows-${{ env.BUILD_TYPE }} --target package
+          cmake --preset windows-${{ env.BUILD_TYPE }} ${{ steps.dependencies.outputs.cmakeArgs }}
+          cmake --build --preset windows-${{ env.BUILD_TYPE }}
         env:
           BUILD_TYPE: ${{ inputs.event_name == 'pull_request' && 'debug' || 'release' }}
           HINT: ${{ steps.dependencies.outputs.cmakeArgs != '' && '(with pre-built dependencies)' || '(full build)' }}
 
+
       
-      - name: 📦 Upload Artifacts
+      - name: 📦 Upload
+        if: ${{ inputs.publish || inputs.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.qt_version == '6' && 'windows_x64_qt6' || 'windows_x64' }}
-          path: |
-            build/*.exe
-            build/Hyperion-*
-          if-no-files-found: warn
+          path: build/bin/*.exe
+
