@@ -88,7 +88,7 @@ jobs:
 
       - name: 💾 Download Pre-Build Dependencies
         id: dependencies
-        uses: ./.github/actions/download-pre-built-deps
+        uses: ./.github
         with:
           os: 'windows'
           architecture: 'x64'
